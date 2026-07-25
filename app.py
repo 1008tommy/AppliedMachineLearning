@@ -2,9 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
  
-# ---------------------------------------------------------
 # Load the trained model, expected feature list, and sample records
-# ---------------------------------------------------------
 model = joblib.load("decision_tree_model.pkl")
 feature_names = joblib.load("model_features.pkl")
 sample_data = pd.read_csv("sample_data.csv")
@@ -18,17 +16,16 @@ st.write(
     "and click **Predict** to see whether the model classifies it as BENIGN or NOT BENIGN."
 )
  
-# ---------------------------------------------------------
+
 # Sample record selector
-# ---------------------------------------------------------
 sample_labels = sample_data["Original Label"].tolist()
-sample_options = ["-- Start with default values --"] + [
+sample_options = ["Start with default values"] + [
     f"{i}: {label}" for i, label in enumerate(sample_labels)
 ]
  
 selected_sample = st.selectbox("Load a sample record", sample_options)
  
-if selected_sample == "-- Start with default values --":
+if selected_sample == "Start with default values":
     default_values = {feature: 0.0 for feature in feature_names}
 else:
     sample_index = int(selected_sample.split(":")[0])
@@ -36,9 +33,8 @@ else:
  
 st.divider()
  
-# ---------------------------------------------------------
+
 # Input form
-# ---------------------------------------------------------
 st.subheader("Flow Feature Values")
 st.caption("Values are pre-filled from the selected sample. Edit any field before predicting.")
  
@@ -57,9 +53,8 @@ with st.form("prediction_form"):
  
     submitted = st.form_submit_button("Predict", type="primary")
  
-# ---------------------------------------------------------
+
 # Prediction
-# ---------------------------------------------------------
 if submitted:
     input_df = pd.DataFrame([user_input])[feature_names]
     prediction = model.predict(input_df)[0]
