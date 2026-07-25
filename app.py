@@ -71,11 +71,3 @@ if submitted:
         st.success(f"Prediction: **{prediction}**")
     else:
         st.error(f"Prediction: **{prediction}**")
- 
-    if hasattr(model, "predict_proba"):
-        probabilities = model.predict_proba(input_df)[0]
-        probability_df = pd.DataFrame({
-            "Class": model.classes_,
-            "Probability": probabilities
-        })
-        st.dataframe(probability_df, use_container_width=True, hide_index=True)
